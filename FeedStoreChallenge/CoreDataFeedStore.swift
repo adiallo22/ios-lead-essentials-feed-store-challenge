@@ -47,12 +47,16 @@ public final class CoreDataFeedStore: FeedStore {
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		let localContext = context
 		localContext.perform {
-			try! ManagedCache.find(in: localContext).map(localContext.delete)
-			let cache = ManagedCache(context: localContext)
-			cache.feed = ManagedFeedImage.images(from: feed, in: localContext)
-			cache.timestamp = timestamp
-			try! localContext.save()
-			completion(nil)
+			do {
+				try ManagedCache.find(in: localContext).map(localContext.delete)
+				let cache = ManagedCache(context: localContext)
+				cache.feed = ManagedFeedImage.images(from: feed, in: localContext)
+				cache.timestamp = timestamp
+				try localContext.save()
+				completion(nil)
+			} catch {
+				completion(error)
+			}
 		}
 	}
 
