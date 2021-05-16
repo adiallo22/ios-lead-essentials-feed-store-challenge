@@ -31,10 +31,8 @@ public final class CoreDataFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		let localContext = context
 		localContext.perform {
-			let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-			request.returnsObjectsAsFaults = false
 			do {
-				if let cache = try localContext.fetch(request).first {
+				if let cache = try ManagedCache.find(in: localContext) {
 					let localFeed = cache.feed.compactMap { ($0 as? ManagedFeedImage)?.local }
 					completion(.found(feed: localFeed, timestamp: cache.timestamp))
 				} else {
@@ -49,6 +47,7 @@ public final class CoreDataFeedStore: FeedStore {
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		let localContext = context
 		localContext.perform {
+			try! ManagedCache.find(in: localContext).map(localContext.delete)
 			let cache = ManagedCache(context: localContext)
 			cache.feed = ManagedFeedImage.images(from: feed, in: localContext)
 			cache.timestamp = timestamp
@@ -66,6 +65,12 @@ public final class CoreDataFeedStore: FeedStore {
 class ManagedCache: NSManagedObject {
 	@NSManaged var timestamp: Date
 	@NSManaged var feed: NSOrderedSet
+
+	static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
+		let request = NSFetchRequest<ManagedCache>(entityName: entity().name!)
+		request.returnsObjectsAsFaults = false
+		return try context.fetch(request).first
+	}
 }
 
 @objc(ManagedFeedImage)
