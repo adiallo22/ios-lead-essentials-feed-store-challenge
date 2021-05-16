@@ -29,10 +29,9 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		let localContext = context
-		localContext.perform {
+		perform { (context) in
 			do {
-				if let cache = try ManagedCache.find(in: localContext) {
+				if let cache = try ManagedCache.find(in: context) {
 					completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
 				} else {
 					completion(.empty)
@@ -44,13 +43,12 @@ public final class CoreDataFeedStore: FeedStore {
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let localContext = context
-		localContext.perform {
+		perform { (context) in
 			do {
-				let cache = try ManagedCache.newUniqueInstance(in: localContext)
-				cache.feed = ManagedFeedImage.images(from: feed, in: localContext)
+				let cache = try ManagedCache.newUniqueInstance(in: context)
+				cache.feed = ManagedFeedImage.images(from: feed, in: context)
 				cache.timestamp = timestamp
-				try localContext.save()
+				try context.save()
 				completion(nil)
 			} catch {
 				completion(error)
@@ -60,6 +58,11 @@ public final class CoreDataFeedStore: FeedStore {
 
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		fatalError("Must be implemented")
+	}
+	
+	private func perform(_ action: @escaping (NSManagedObjectContext) -> Void) {
+		let localContext = self.context
+		localContext.perform { action(localContext) }
 	}
 }
 
