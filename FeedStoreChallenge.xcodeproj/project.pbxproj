@@ -83,8 +83,7 @@
 			children = (
 				08CB21D0261632DB00751C29 /* CoreDataHelpers.swift */,
 				C0DAEA9A265167CF00D82AE2 /* FeedStore.xcdatamodeld */,
-				C0DAEAAB2653556300D82AE2 /* ManagedCache.swift */,
-				C0DAEAAF2653558800D82AE2 /* ManagedFeedImage.swift */,
+				C0DAEAB3265355C500D82AE2 /* Models */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -151,6 +150,15 @@
 				08CB21DD2616389100751C29 /* NSManagedObjectContext+Stub.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		C0DAEAB3265355C500D82AE2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C0DAEAAB2653556300D82AE2 /* ManagedCache.swift */,
+				C0DAEAAF2653558800D82AE2 /* ManagedFeedImage.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
