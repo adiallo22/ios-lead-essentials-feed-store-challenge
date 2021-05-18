@@ -82,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				08CB21D0261632DB00751C29 /* CoreDataHelpers.swift */,
-				C0DAEA9A265167CF00D82AE2 /* FeedStore.xcdatamodeld */,
 				C0DAEAB3265355C500D82AE2 /* Models */,
 			);
 			path = Helpers;
@@ -155,6 +154,7 @@
 		C0DAEAB3265355C500D82AE2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C0DAEA9A265167CF00D82AE2 /* FeedStore.xcdatamodeld */,
 				C0DAEAAB2653556300D82AE2 /* ManagedCache.swift */,
 				C0DAEAAF2653558800D82AE2 /* ManagedFeedImage.swift */,
 			);
